@@ -9,5 +9,68 @@ body {
     display: grid;
     place-items: center;
     background-color: beige;
-   
+    height: 100vh;
+}
+
+.startBtn{
+    background-color: blue;
+    padding: 25px;
+    font-size: 32px;
+    color: white;
+}
+
+.timer{
+    padding: 10px;
+    font-size: 20px;
+}
+
+.answerBtn{
+    padding: 15px;
+    background-color: blue;
+    color:white;
+    font-size: 20px;
+}
+
+.answerBtn:hover{
+    background-color: aquamarine;
+}
+
+#question{
+    padding: 15px;
+    font-weight: bold;
+    font-size: 20px;
+}
+
+.playerScore{
+    padding: 15px;
+    font-weight: bold;
+    font-size: 20px;
+}
+
+.submitBtn{
+    padding: 10px;
+    background-color: blue;
+    color:white;
+    font-size: 20px;
+}
+
+.result-label p{
+    font-weight: bold;
+    font-size: 20px;
+    padding: 5px;
+    
+}
+
+#restart{
+    padding: 10px;
+    background-color: blue;
+    color:white;
+    font-size: 20px;
+}
+
+#clearScore{
+    padding: 10px;
+    background-color: blue;
+    color:white;
+    font-size: 20px;
 }
