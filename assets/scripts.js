@@ -40,33 +40,42 @@ var quizQuestions =[
         choiceC:"A ! B is false",
         choiceD:"A && B is true",
         correctAnswer:"a",
-    }
+    },
 
 ];
 
 //get elements from HTML
-var startBtnEl= document.getElementsByClassName("startBtn");
+var startBtnEl= document.getElementById("startBtn");
 var btnA = document.getElementById("a");
 var btnB = document.getElementById("b");
 var btnC = document.getElementById("c");
 var btnD = document.getElementById("d");
-var timerEl=document.getElementsByClassName("timer");
-var quizEl= document.getElementsByClassName("quiz");
-var resultPageEl= document.getElementsByClassName("resultPage");
-var scoreBoardEl= document.getElementsByClassName("scoreBoard");
+var timerEl=document.getElementById("timer");
+var quizEl= document.getElementById("quiz");
+var resultPageEl= document.getElementById("resultPage");
+var scoreBoardEl= document.getElementById("scoreBoard");
 var questionEl=document. getElementById("question")
+var openPageEl=document.getElementById("openPage");
+var initialEl=document.getElementById("initial");
+var playerScoreEl=document.getElementById("playerScore");
+var submitBtnEl=document.getElementById("submitBtn");
+var userInitalEl=document.getElementById("userInitals");
+var userScoreEl=document.getElementById("userScore");
 
 //New elements needed 
-var currentQuestionNo=0;
+var currentQuestionNo=0;                                         
 var lastQuestionNo=quizQuestions.length;
-
+var startingTime=31;                               
+var timeInterval;
+var score =0;
 //get questions for the quiz
 var getQuiz=function(){
     resultPageEl.style.display="none";
     scoreBoardEl.style.display="none";
+    openPageEl.style.display="none";
 
     if (currentQuestionNo===lastQuestionNo){
-        //todo:get fuction in 
+        displayResult();
     }
     else{
         var currentQuestion=quizQuestions[currentQuestionNo];
@@ -78,3 +87,108 @@ var getQuiz=function(){
     }
 
 };
+
+//Confirm Answer function
+
+var confirmAns = function(picked){
+    correct=quizQuestions[currentQuestionNo].correctAnswer;
+    if(picked===correct && currentQuestionNo!==lastQuestionNo){
+        currentQuestionNo++;
+        score++;
+        window.alert("CORRECT!YAY");
+        getQuiz();
+    }
+    else if (picked!==correct && currentQuestionNo!==lastQuestionNo){
+        currentQuestionNo++;
+        startingTime=startingTime-5;
+        window.alert("WRONG");
+        getQuiz();
+    }
+    else{
+        displayResult();
+    }
+};
+
+//start game function 
+var startGame=function(){
+    resultPageEl.style.display="none";
+    scoreBoardEl.style.display="none";
+    openPageEl.style.display="none";
+    timerEl.style.display="block";
+    quizEl.style.display="grid";
+
+    getQuiz();
+
+    //timer
+      timeInterval= setInterval(function(){
+        startingTime--;
+        timerEl.textContent="Timer: " + startingTime;
+
+        if(startingTime===0){
+            clearInterval(timeInterval);
+            displayResult();
+        }
+    },1000)
+};
+
+//Show Result 
+var displayResult =function(){
+    openPageEl.style.display="none";
+    quizEl.style.display="none";
+    scoreBoardEl.style.display="none";
+    timerEl.style.display="none";
+    resultPageEl.style.display="grid";
+
+
+    initialEl="";
+    playerScoreEl.innerHTML="<p>" + "Here is your score:"+ score+"</p>";
+
+};
+
+//save information to local storage function 
+ var saveToLocalStorage=function(){
+    if(initialEl.value ===""){
+        window.alert("Enter your inital to continue to see the Score Boar!")
+        return false;
+    }
+    else{
+        var recordScore=JSON.parse(localStorage.getItem("recordScore"))|| [];
+        var currentPlayer=initialEl.value;
+        var currentRecord ={
+            name: currentPlayer,
+            score:score
+        };
+        recordScore.push(currentRecord);
+        localStorage.setItem("recordScore",JSON.stringify(recordScore));
+    }
+    displayScoreBoard();
+ }
+ submitBtnEl.addEventListener("click",saveToLocalStorage);
+
+//Show Score Board
+var displayScoreBoard=function(){
+    openPageEl.style.display="none";
+    quizEl.style.display="none";
+    scoreBoardEl.style.display="grid";
+    timerEl.style.display="none";
+    resultPageEl.style.display="none";
+
+    userInitalEl.innerHTML="";
+    userScoreEl.innerHTML="";
+
+    var highscore=JSON.parse(localStorage.getItem("recordScore")) || [];
+    for (i=0;i<highscore.length;i++){
+        var nameSpan=document.createElement("li");
+        var scoreSpan=document.createElement("li");
+        nameSpan.textContent=highscore[i].name;
+        scoreSpan.textContent=highscore[i].score;
+
+        userInitalEl.appendChild(nameSpan);
+        userScoreEl.appendChild(scoreSpan);
+    }
+};
+
+
+
+
+startBtnEl.addEventListener("click",startGame);
