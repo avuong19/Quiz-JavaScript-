@@ -140,7 +140,7 @@ var displayResult =function(){
     resultPageEl.style.display="grid";
 
 
-    initialEl="";
+    initialEl.value="";
     playerScoreEl.innerHTML="<p>" + "Here is your score:"+ score+"</p>";
 
 };
@@ -148,12 +148,12 @@ var displayResult =function(){
 //save information to local storage function 
  var saveToLocalStorage=function(){
     if(initialEl.value ===""){
-        window.alert("Enter your inital to continue to see the Score Boar!")
+        window.alert("Enter your inital to continue to see the Score Board!")
         return false;
     }
     else{
         var recordScore=JSON.parse(localStorage.getItem("recordScore"))|| [];
-        var currentPlayer=initialEl.value;
+        var currentPlayer=initialEl.value.trim();
         var currentRecord ={
             name: currentPlayer,
             score:score
@@ -187,6 +187,27 @@ var displayScoreBoard=function(){
         userScoreEl.appendChild(scoreSpan);
     }
 };
+
+//restart function
+var restartGame=function(){
+    currentQuestionNo=0;                                         
+    startingTime=31;                               
+    score =0;
+
+    openPageEl.style.display="grid";
+    quizEl.style.display="none";
+    scoreBoardEl.style.display="none";
+    timerEl.style.display="none";
+    resultPageEl.style.display="none";
+
+}
+
+//clearScore function
+var clearScore=function(){
+    window.localStorage.clear();
+    userInitalEl.textContent="";
+    userScoreEl.textContent="";
+}
 
 
 
